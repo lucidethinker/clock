@@ -5,6 +5,8 @@ const usePomodoroStore = create((set) => ({
   breakTimeLeft: 5 * 60, // initial break time left in seconds
   isRunning: false, // whether the timer is currently running
   isBreak: false, // whether it is currently break time
+  breakLength: 5, // break length in minutes
+  sessionLength: 25, // session length in minutes
   startTimer: () => {
     set({ isRunning: true });
   },
@@ -28,6 +30,12 @@ const usePomodoroStore = create((set) => ({
         isBreak,
       };
     });
+  },
+  setBreakLength: (length) => {
+    set({ breakLength: length, breakTimeLeft: length * 60 });
+  },
+  setSessionLength: (length) => {
+    set({ sessionLength: length, timeLeft: length * 60 });
   },
 }));
 

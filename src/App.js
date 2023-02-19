@@ -6,9 +6,21 @@ import './style/style.css'
 
 function App() {
   const [seconds, setSeconds] = useState(0);
-  const [isBreak, setIsBreak] = useState(false);
 
-  const { timeLeft, breakTimeLeft, isRunning, startTimer, stopTimer, resetTimer, decrementTime } = usePomodoroStore();
+  const {
+    timeLeft,
+    breakTimeLeft,
+    isRunning,
+    isBreak,
+    breakLength,
+    sessionLength,
+    startTimer,
+    stopTimer,
+    resetTimer,
+    decrementTime,
+    setBreakLength,
+    setSessionLength,
+  } = usePomodoroStore();
 
   useEffect(() => {
     let interval = null;
@@ -41,7 +53,6 @@ function App() {
   const reset = () => {
     resetTimer();
     setSeconds(timeLeft);
-    setIsBreak(false);
   };
 
   const formatTime = (totalSeconds) => {
@@ -50,13 +61,60 @@ function App() {
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
 
+  
   return (
 
     <div >
 
       <Header />
       <div className="flex flex-col items-center justify-center h-screen bg-gray-100 ">
-      <h1 className="text-4xl font-bold mb-4">{isBreak ? 'BREAK' : 'WORK'} TIME</h1>
+      <h1 className="text-4xl font-bold mb-4">{isBreak ? "Break" : "Session"} Time</h1>
+
+          
+      <div className="flex justify-center space-x-4">
+      <div className="text-center">
+        <p className="text-lg font-bold">Session Length</p>
+        <div className="flex items-center justify-center">
+          <button
+            className="text-lg font-bold border border-gray-400 rounded-full h-8 w-8 mr-2"
+            onClick={() => setSessionLength(sessionLength - 1)}
+            disabled={isRunning || sessionLength === 1}
+          >
+            -
+          </button>
+          <p className="text-lg font-bold">{sessionLength}</p>
+          <button
+            className="text-lg font-bold border border-gray-400 rounded-full h-8 w-8 ml-2"
+            onClick={() => setSessionLength(sessionLength + 1)}
+            disabled={isRunning || sessionLength === 60}
+          >
+            +
+          </button>
+        </div>
+      </div>
+      <div className="text-center">
+        <p className="text-lg font-bold">Break Length</p>
+        <div className="flex items-center justify-center">
+          <button
+            className="text-lg font-bold border border-gray-400 rounded-full h-8 w-8 mr-2"
+            onClick={() => setBreakLength(breakLength - 1)}
+            disabled={isRunning || breakLength === 1}
+          >
+            -
+          </button>
+          <p className="text-lg font-bold">{breakLength}</p>
+          <button
+            className="text-lg font-bold border border-gray-400 rounded-full h-8 w-8 ml-2"
+            onClick={() => setBreakLength(breakLength + 1)}
+            disabled={isRunning || breakLength === 60}
+          >
+            +
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    
       <div className="text-6xl font-bold mb-4">{formatTime(seconds)}</div>
       <div className="flex gap-5">
         {!isRunning ? (
